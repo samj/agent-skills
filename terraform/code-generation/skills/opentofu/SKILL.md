@@ -17,6 +17,18 @@ Use this skill when:
 - Working with the OpenTofu Registry
 - Using `tofu` CLI commands
 
+## Important Constraints
+
+- **Do NOT reference Terraform Cloud, HCP, or Terraform Enterprise.** These are HashiCorp SaaS products not compatible with OpenTofu.
+- **Assume local or blob-backed state** (S3, Azure Blob, or GCS). Do not generate configurations for proprietary remote state backends.
+- **Prefer OpenTofu-native features** over HashiCorp-specific services.
+
+## Safety Defaults
+
+- **Prefer `tofu plan` over `tofu apply`** - Always generate a plan first to review changes.
+- **Never run `tofu apply` without explicit human confirmation** - Use `tofu apply` only after reviewing plan output; avoid `-auto-approve` in production.
+- **Clearly surface destructive changes before apply** - Review plan output for resources marked for destruction (`-/+` or `-`).
+
 ## Key Differences from Terraform
 
 ### CLI Commands
@@ -64,19 +76,25 @@ terraform {
 
 ### Version Constraints
 
-OpenTofu versions follow their own release schedule. Specify OpenTofu version requirements:
+OpenTofu versions follow their own release schedule, independent of Terraform. The `required_version` constraint refers to the **OpenTofu CLI version**, not Terraform:
 
 ```hcl
 terraform {
-  required_version = ">= 1.6.0"  # OpenTofu version
+  # This constrains the OpenTofu CLI version (e.g., OpenTofu 1.6.0+)
+  # NOT Terraform versions - these are separate version lines
+  required_version = ">= 1.6.0"
 }
 ```
+
+**Note:** OpenTofu 1.6.x corresponds roughly to Terraform 1.6.x feature parity, but versions diverge over time as OpenTofu adds its own features.
 
 ## OpenTofu-Specific Features
 
 ### State Encryption
 
-OpenTofu supports encrypting state files at rest (available since OpenTofu 1.7.0):
+OpenTofu supports encrypting state files at rest (available since OpenTofu 1.7.0).
+
+> **⚠️ WARNING: Losing encryption keys permanently destroys access to state.** There is no recovery mechanism. Key providers must be securely backed up before enabling encryption. Rotate keys deliberately with a documented migration plan—never delete old keys until migration is verified.
 
 ```hcl
 terraform {
@@ -294,7 +312,7 @@ OpenTofu uses the same file organization as Terraform:
 ```hcl
 # terraform.tf
 terraform {
-  required_version = ">= 1.7.0"
+  required_version = ">= 1.7.0"  # OpenTofu version (not Terraform)
 
   required_providers {
     aws = {
