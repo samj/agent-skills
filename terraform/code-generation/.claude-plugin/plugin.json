@@ -1,7 +1,7 @@
 {
   "name": "terraform-code-generation",
   "version": "1.0.0",
-  "description": "Terraform code generation skills for Claude Code, including HCL generation, style guides, and testing.",
+  "description": "Terraform and OpenTofu code generation skills for Claude Code, including HCL generation, style guides, testing, and OpenTofu-specific features.",
   "author": {
     "name": "HashiCorp",
     "url": "https://github.com/hashicorp"
@@ -9,7 +9,7 @@
   "homepage": "https://developer.hashicorp.com/terraform/language",
   "repository": "https://github.com/hashicorp/agent-skills",
   "license": "MPL-2.0",
-  "keywords": ["terraform", "hcl", "infrastructure", "iac", "testing", "style-guide"],
+  "keywords": ["terraform", "opentofu", "tofu", "hcl", "infrastructure", "iac", "testing", "style-guide"],
   "mcpServers": {
     "terraform": {
       "command": "docker",
